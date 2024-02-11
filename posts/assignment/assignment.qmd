@@ -39,10 +39,10 @@ BOOKS <- read.csv("goodreads_data.csv")
 head(BOOKS)
 ```
 
-```         
+```{r}
+ggplot(BOOKS, aes(Avg_Rating))+ geom_histogram(binwidth = 0.01)
 ```
 
 ```{r}
-ggplot(BOOKS, aes(Avg_Rating))+ geom_histogram(binwidth = 0.01)
-
+ggplot(BOOKS, aes(Avg_Rating))+ geom_density()
 ```
