@@ -7,9 +7,7 @@ categories: [assignment]
 
 code-fold: true
 code-tools: true
-description: "Still getting to this..."
-
-draft: true
+description: "In progress..."
 ---
 
 # Marks and Channels
@@ -21,16 +19,18 @@ library(tidyverse)
 
 The Data sets being used:
 
+[Top 100 Young Adult Books](https://data.world/yansian/top-100-young-adult-fiction)
+
 ```{r}
 BOOKS <- read.csv("goodreads_Top100_YoungAdultFiction1.csv")
 ```
 
-## Expressiveness and effectiveness
+## Expressiveness and Effectiveness
 
-Figure 1 (note: i need a caption)
+Figure 1
 
 ```{r}
-ggplot(BOOKS, aes(pages))+ geom_histogram(binwidth = 20)
+
 ```
 
 Figure 2
@@ -41,16 +41,33 @@ Figure 2
 
 ## Discriminability
 
-Figure 3
-
 ```{r}
+#fig 3
+fig_3 <- ggplot(BOOKS, aes(pages))+ geom_histogram(binwidth = 20, color="blue", fill="blue")
+
+fig_3_titles <- labs(title = "Number of Pages for Top 100 Young Adult Books", 
+                     caption = "This graph shows the number of pages of the most popular young adult books to within 20 pages.")
+fig_3_theme <- theme(panel.background=element_rect(fill="white"), 
+                     plot.caption = element_text(hjust = 0.5))
+
+fig_3 <- fig_3 + fig_3_titles + fig_3_theme
+
+print(fig_3)
 
 ```
 
-Figure 4
-
 ```{r}
+#fig 4
+fig_4 <- ggplot(BOOKS, aes(pages))+ geom_histogram(binwidth = .5, color="red", fill="red")
 
+fig_4_titles <- labs(title = "Number of Pages for Top 100 Young Adults Books",
+              caption = "This uses bin sizes of half a page. The data doesn't even measure book length to half pages.")
+fig_4_theme <- theme(panel.background=element_rect(fill="white"),
+                     plot.caption = element_text(hjust = 0.5))
+
+fig_4 <- fig_4 + fig_4_titles + fig_4_theme
+
+print(fig_4)
 ```
 
 ## Separability

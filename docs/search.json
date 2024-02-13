@@ -14,6 +14,41 @@
     "text": "The Evergreen State College | Olympia WA | Bachelor of Science | Sept 2018 - June 2022"
   },
   {
+    "objectID": "posts/assignment 4/assignment 4.html",
+    "href": "posts/assignment 4/assignment 4.html",
+    "title": "Assignment 4",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\n\n\nThe Data sets being used:\nTop 100 Young Adult Books\n\n\nCode\nBOOKS &lt;- read.csv(\"goodreads_Top100_YoungAdultFiction1.csv\")\n\n\n\n\nFigure 1\nFigure 2\n\n\n\n\n\nCode\n#fig 3\nfig_3 &lt;- ggplot(BOOKS, aes(pages))+ geom_histogram(binwidth = 20, color=\"blue\", fill=\"blue\")\n\nfig_3_titles &lt;- labs(title = \"Number of Pages for Top 100 Young Adult Books\", \n                     caption = \"This graph shows the number of pages of the most popular young adult books to within 20 pages.\")\nfig_3_theme &lt;- theme(panel.background=element_rect(fill=\"white\"), \n                     plot.caption = element_text(hjust = 0.5))\n\nfig_3 &lt;- fig_3 + fig_3_titles + fig_3_theme\n\nprint(fig_3)\n\n\n\n\n\n\n\nCode\n#fig 4\nfig_4 &lt;- ggplot(BOOKS, aes(pages))+ geom_histogram(binwidth = .5, color=\"red\", fill=\"red\")\n\nfig_4_titles &lt;- labs(title = \"Number of Pages for Top 100 Young Adults Books\",\n              caption = \"This uses bin sizes of half a page. The data doesn't even measure book length to half pages.\")\nfig_4_theme &lt;- theme(panel.background=element_rect(fill=\"white\"),\n                     plot.caption = element_text(hjust = 0.5))\n\nfig_4 &lt;- fig_4 + fig_4_titles + fig_4_theme\n\nprint(fig_4)\n\n\n\n\n\n\n\n\nFigure 5\nFigure 6\n\n\n\nFigure 7\nFigure 8"
+  },
+  {
+    "objectID": "posts/assignment 4/assignment 4.html#expressiveness-and-effectiveness",
+    "href": "posts/assignment 4/assignment 4.html#expressiveness-and-effectiveness",
+    "title": "Assignment 4",
+    "section": "",
+    "text": "Figure 1\nFigure 2"
+  },
+  {
+    "objectID": "posts/assignment 4/assignment 4.html#discriminability",
+    "href": "posts/assignment 4/assignment 4.html#discriminability",
+    "title": "Assignment 4",
+    "section": "",
+    "text": "Code\n#fig 3\nfig_3 &lt;- ggplot(BOOKS, aes(pages))+ geom_histogram(binwidth = 20, color=\"blue\", fill=\"blue\")\n\nfig_3_titles &lt;- labs(title = \"Number of Pages for Top 100 Young Adult Books\", \n                     caption = \"This graph shows the number of pages of the most popular young adult books to within 20 pages.\")\nfig_3_theme &lt;- theme(panel.background=element_rect(fill=\"white\"), \n                     plot.caption = element_text(hjust = 0.5))\n\nfig_3 &lt;- fig_3 + fig_3_titles + fig_3_theme\n\nprint(fig_3)\n\n\n\n\n\n\n\nCode\n#fig 4\nfig_4 &lt;- ggplot(BOOKS, aes(pages))+ geom_histogram(binwidth = .5, color=\"red\", fill=\"red\")\n\nfig_4_titles &lt;- labs(title = \"Number of Pages for Top 100 Young Adults Books\",\n              caption = \"This uses bin sizes of half a page. The data doesn't even measure book length to half pages.\")\nfig_4_theme &lt;- theme(panel.background=element_rect(fill=\"white\"),\n                     plot.caption = element_text(hjust = 0.5))\n\nfig_4 &lt;- fig_4 + fig_4_titles + fig_4_theme\n\nprint(fig_4)"
+  },
+  {
+    "objectID": "posts/assignment 4/assignment 4.html#separability",
+    "href": "posts/assignment 4/assignment 4.html#separability",
+    "title": "Assignment 4",
+    "section": "",
+    "text": "Figure 5\nFigure 6"
+  },
+  {
+    "objectID": "posts/assignment 4/assignment 4.html#popout",
+    "href": "posts/assignment 4/assignment 4.html#popout",
+    "title": "Assignment 4",
+    "section": "",
+    "text": "Figure 7\nFigure 8"
+  },
+  {
     "objectID": "posts/assignment 2/assignment 2.html",
     "href": "posts/assignment 2/assignment 2.html",
     "title": "Assignment 2",
@@ -46,6 +81,6 @@
     "href": "index.html",
     "title": "Robyn’s Portfolio",
     "section": "",
-    "text": "Assignment 2\n\n\nDescribing Data\n\n\n\n\nassignment\n\n\n\n\nGoodreads Rating Data.\n\n\n\n\n\n\nFeb 10, 2024\n\n\nRobyn Steveley\n\n\n\n\n\n\n  \n\n\n\n\nNotes\n\n\n\n\n\n\n\nnotes\n\n\n\n\n\n\n\n\n\n\n\nFeb 9, 2024\n\n\nRobyn Stevley\n\n\n\n\n\n\nNo matching items"
+    "text": "Assignment 4\n\n\nMarks and Channels\n\n\n\n\nassignment\n\n\n\n\nIn progress…\n\n\n\n\n\n\nFeb 11, 2024\n\n\nRobyn Steveley\n\n\n\n\n\n\n  \n\n\n\n\nAssignment 2\n\n\nDescribing Data\n\n\n\n\nassignment\n\n\n\n\nGoodreads Rating Data.\n\n\n\n\n\n\nFeb 10, 2024\n\n\nRobyn Steveley\n\n\n\n\n\n\n  \n\n\n\n\nNotes\n\n\n\n\n\n\n\nnotes\n\n\n\n\n\n\n\n\n\n\n\nFeb 9, 2024\n\n\nRobyn Stevley\n\n\n\n\n\n\nNo matching items"
   }
 ]
