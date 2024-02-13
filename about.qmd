@@ -1,5 +1,5 @@
 ---
-title: "Robyn Steveley"
+title: "About"
 image: Portrait.png
 about:
   template: jolla
@@ -8,6 +8,7 @@ about:
       text: Github
       href: https://github.com/RobynSteveley
 ---
+# Robyn Steveley
 
 ## Education
 
