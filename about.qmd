@@ -1,5 +1,5 @@
 ---
-title: "About"
+title: "Robyn Steveley"
 image: Portrait.png
 about:
   template: jolla
@@ -9,4 +9,7 @@ about:
       href: https://github.com/RobynSteveley
 ---
 
+## Education
 
+The Evergreen State College | Olympia WA |
+Bachelor of Science | Sept 2018 - June 2022

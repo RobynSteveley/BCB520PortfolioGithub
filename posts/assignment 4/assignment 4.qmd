@@ -8,17 +8,75 @@ categories: [assignment]
 code-fold: true
 code-tools: true
 description: "Still getting to this..."
+
+draft: true
 ---
+
+# Marks and Channels
 
 ```{r}
 #| output: false
 library(tidyverse)
 ```
 
+The Data sets being used:
+
 ```{r}
 BOOKS <- read.csv("goodreads_Top100_YoungAdultFiction1.csv")
 ```
 
+## Expressiveness and effectiveness
+
+Figure 1 (note: i need a caption)
+
 ```{r}
-ggplot(BOOKS, aes(pages, color="blue"))+ geom_histogram()
+ggplot(BOOKS, aes(pages))+ geom_histogram(binwidth = 20)
+```
+
+Figure 2
+
+```{r}
+
+```
+
+## Discriminability
+
+Figure 3
+
+```{r}
+
+```
+
+Figure 4
+
+```{r}
+
+```
+
+## Separability
+
+Figure 5
+
+```{r}
+
+```
+
+Figure 6
+
+```{r}
+
+```
+
+## Popout
+
+Figure 7
+
+```{r}
+
+```
+
+Figure 8
+
+```{r}
+
 ```
