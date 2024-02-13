@@ -1,8 +1,10 @@
 {
-  "hash": "81b100d2db0fb379a674e7a36ed4db02",
+  "hash": "5430ddf84fccd7b495f8a91d8bfd995b",
   "result": {
-    "markdown": "---\ntitle: \"Assignment 4\"\nsubtitle: \"Marks and Channels\"\nauthor: \"Robyn Steveley\"\ndate: \"2024-02-11\"\ncategories: [assignment]\n\ncode-fold: true\ncode-tools: true\ndescription: \"Still getting to this...\"\n---\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nBOOKS <- read.csv(\"goodreads_Top100_YoungAdultFiction1.csv\")\n```\n:::\n",
-    "supporting": [],
+    "markdown": "---\ntitle: \"Assignment 4\"\nsubtitle: \"Marks and Channels\"\nauthor: \"Robyn Steveley\"\ndate: \"2024-02-11\"\ncategories: [assignment]\n\ncode-fold: true\ncode-tools: true\ndescription: \"Still getting to this...\"\n---\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nBOOKS <- read.csv(\"goodreads_Top100_YoungAdultFiction1.csv\")\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nggplot(BOOKS, aes(pages, color=\"blue\"))+ geom_histogram()\n```\n\n::: {.cell-output .cell-output-stderr}\n```\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.\n```\n:::\n\n::: {.cell-output-display}\n![](assignment-4_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n:::\n",
+    "supporting": [
+      "assignment-4_files"
+    ],
     "filters": [
       "rmarkdown/pagebreak.lua"
     ],

@@ -4,7 +4,7 @@
     "href": "posts/assignment 4/assignment 4.html",
     "title": "Assignment 4",
     "section": "",
-    "text": "Code\nlibrary(tidyverse)\n\n\n\n\nCode\nBOOKS &lt;- read.csv(\"goodreads_Top100_YoungAdultFiction1.csv\")"
+    "text": "Code\nlibrary(tidyverse)\n\n\n\n\nCode\nBOOKS &lt;- read.csv(\"goodreads_Top100_YoungAdultFiction1.csv\")\n\n\n\n\nCode\nggplot(BOOKS, aes(pages, color=\"blue\"))+ geom_histogram()\n\n\n`stat_bin()` using `bins = 30`. Pick better value with `binwidth`."
   },
   {
     "objectID": "posts/assignment 2/assignment 2.html",
@@ -30,15 +30,15 @@
   {
     "objectID": "posts/welcome/index.html",
     "href": "posts/welcome/index.html",
-    "title": "Welcome To My Blog",
+    "title": "Notes",
     "section": "",
-    "text": "This is the first post in a Quarto blog. Welcome!"
+    "text": "A place to keep interesting or useful things."
   },
   {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Robyn’s Portfolio",
     "section": "",
-    "text": "Assignment 4\n\n\nMarks and Channels\n\n\n\n\nassignment\n\n\n\n\nStill getting to this…\n\n\n\n\n\n\nFeb 11, 2024\n\n\nRobyn Steveley\n\n\n\n\n\n\n  \n\n\n\n\nAssignment 2\n\n\nDescribing Data\n\n\n\n\nassignment\n\n\n\n\nGoodreads Rating Data.\n\n\n\n\n\n\nFeb 10, 2024\n\n\nRobyn Steveley\n\n\n\n\n\n\n  \n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\n\nother\n\n\n\n\n\n\n\n\n\n\n\nFeb 9, 2024\n\n\nRobyn Stevley\n\n\n\n\n\n\nNo matching items"
+    "text": "Assignment 4\n\n\nMarks and Channels\n\n\n\n\nassignment\n\n\n\n\nStill getting to this…\n\n\n\n\n\n\nFeb 11, 2024\n\n\nRobyn Steveley\n\n\n\n\n\n\n  \n\n\n\n\nAssignment 2\n\n\nDescribing Data\n\n\n\n\nassignment\n\n\n\n\nGoodreads Rating Data.\n\n\n\n\n\n\nFeb 10, 2024\n\n\nRobyn Steveley\n\n\n\n\n\n\n  \n\n\n\n\nNotes\n\n\n\n\n\n\n\nnotes\n\n\n\n\n\n\n\n\n\n\n\nFeb 9, 2024\n\n\nRobyn Stevley\n\n\n\n\n\n\nNo matching items"
   }
 ]

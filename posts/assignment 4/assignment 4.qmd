@@ -20,5 +20,5 @@ BOOKS <- read.csv("goodreads_Top100_YoungAdultFiction1.csv")
 ```
 
 ```{r}
-ggplot(BOOKS, aes(Avg_Rating))+ geom_histogram(binwidth = 0.01)
+ggplot(BOOKS, aes(pages, color="blue"))+ geom_histogram()
 ```

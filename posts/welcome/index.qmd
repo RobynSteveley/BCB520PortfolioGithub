@@ -1,10 +1,11 @@
 ---
-title: "Welcome To My Blog"
+title: "Notes"
 author: "Robyn Stevley"
 date: "2024-02-09"
-categories: [other]
+categories: [notes]
+image: "thumbnail.jpg"
 ---
 
-This is the first post in a Quarto blog. Welcome!
+A place to keep interesting or useful things.
 
-![](thumbnail.jpg)
+
