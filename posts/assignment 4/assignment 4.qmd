@@ -1,0 +1,24 @@
+---
+title: "Assignment 4"
+subtitle: "Marks and Channels"
+author: "Robyn Steveley"
+date: "2024-02-11"
+categories: [assignment]
+
+code-fold: true
+code-tools: true
+description: "Still getting to this..."
+---
+
+```{r}
+#| output: false
+library(tidyverse)
+```
+
+```{r}
+BOOKS <- read.csv("goodreads_Top100_YoungAdultFiction1.csv")
+```
+
+```{r}
+ggplot(BOOKS, aes(Avg_Rating))+ geom_histogram(binwidth = 0.01)
+```

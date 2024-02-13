@@ -1,0 +1,14 @@
+{
+  "hash": "81b100d2db0fb379a674e7a36ed4db02",
+  "result": {
+    "markdown": "---\ntitle: \"Assignment 4\"\nsubtitle: \"Marks and Channels\"\nauthor: \"Robyn Steveley\"\ndate: \"2024-02-11\"\ncategories: [assignment]\n\ncode-fold: true\ncode-tools: true\ndescription: \"Still getting to this...\"\n---\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nBOOKS <- read.csv(\"goodreads_Top100_YoungAdultFiction1.csv\")\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

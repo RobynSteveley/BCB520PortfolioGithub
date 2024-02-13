@@ -1,13 +1,12 @@
 ---
 title: "About"
-image: Water WomanEdit.png
+image: Portrait.png
 about:
   template: jolla
   links:
     - icon: github
       text: Github
       href: https://github.com/RobynSteveley
-
 ---
 
 
