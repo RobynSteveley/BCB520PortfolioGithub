@@ -1,0 +1,14 @@
+{
+  "hash": "f6198d0faa774f4b2a2ea1d946154a69",
+  "result": {
+    "markdown": "---\ntitle: \"ggplot Overview Reference\"\nsubtitle: \"Some Examples\"\nauthor: \"Robyn Steveley\"\ndate: \"2024-02-18\"\ncategories: [other]\n\ncode-fold: true\ndraft: true\n---\n\n::: {.cell}\n\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
