@@ -8,7 +8,6 @@ categories: [other, notes,]
 code-fold: true
 code-tools: true
 description: "Examining the Data in the File"
-draft: true
 ---
 
 ## Set Up
@@ -143,9 +142,11 @@ Genre by Publisher
 
 Year published
 
+if year published =/= year first published color (look up how to do this) for popout
+
 ```{r}
 #Number of Ratings
-fig <- ggplot(BOOKS, aes(x = firstPublishYear))+ geom_histogram(binwidth = 1)
+fig <- ggplot(BOOKS, aes(x = publishedYear))+ geom_histogram(binwidth = 1)
 
 #Style
 fig_labs <- labs(title = "Number of Ratings for Top 100 Young Adult Books")
@@ -162,7 +163,7 @@ Rating Per Year
 
 ```{r}
 #Number of Ratings vs. Rating
-fig <- ggplot(BOOKS, aes(x = firstPublishYear, y = numRatings))+ geom_point()
+fig <- ggplot(BOOKS, aes(x = publishedYear, y = numRatings))+ geom_point()
 
 #Style
 fig_labs <- labs(title = "Number of Ratings for Top 100 Young Adult Books")
