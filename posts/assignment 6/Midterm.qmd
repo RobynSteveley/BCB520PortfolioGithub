@@ -1,0 +1,210 @@
+---
+title: "BCB 520 - Midterm Portfolio Post"
+subtitle: "Comparing University of Idaho grants to similar schools"
+author: "Robyn Steveley"
+date: "2024-03-14"
+categories: [assignment]
+
+code-fold: true
+code-tools: true
+description: "In Progress..."
+draft: true
+---
+
+# Preamble
+
+This post compares the University of Idaho grant awards from the department of agriculture (USDA), the department of energy (DOE), the national institute of health (NIH), and the national science foundation (NSF) to other similar universities.
+
+# The Data
+
+```{r}
+#| output: false
+library(tidyverse)
+library(readxl)
+library(knitr)
+```
+
+**Department of Agriculture (USDA)**
+
+```{r}
+#USDA data for (only) University of Idaho
+
+#reading in the data from file
+USDAdata <- read.csv("USDAtoUI.csv")
+
+#picking out the columns that might be useful
+USDAdata_main <- USDAdata %>% select(Award.Date, Grant.Title, Grantee.Name, Award.Dollars, Program.Name, Program.Area.Name)
+
+knitr::kable(head(USDAdata_main, 4))
+```
+
+**Department of Energy (DOE)**
+
+```{r}
+#DOE data for all schools
+
+#reading in data from file
+DOE_data <- read_xlsx("DOEawards.xlsx")
+
+#picking out the coulumns that might be useful
+DOE_data_main <- DOE_data %>% select(PI, Status, 'Action Type', 'Start Date', 'End Date','Most Recent Award Date','Amount Awarded to Date', 'Amount Awarded this FY', 'Program Area')
+
+knitr::kable(head(DOE_data_main, 4))
+```
+
+**National Institutes of Health (NIH)**
+
+```{r}
+#NIH data for all schools
+#note that this must be grabed from NIH API
+#file named projects_df
+
+#picking out columns that might be useful
+NIH_data_main <- projects_df %>% select(fiscal_year, award_amount, is_active, principal_investigators, contact_pi_name, project_start_date, project_end_date, is_new, project_title, agency_code, organization.org_name)
+
+knitr::kable(head(NIH_data_main, 4))
+```
+
+**National Science Foundation (NSF)**
+
+```{r}
+#NSF data for (only) University of Idaho
+#note that this must be grabbed from NSF API
+#other schools must be grabbed
+# file named NSFtoUI
+
+#picking out columns that might be useful
+NSFtoUI_main <- NSFtoUI %>% select(agency, awardeeName, estimatedTotalAmt, fundsObligatedAmt, fundProgramName, pdPIName, startDate, expDate)
+
+knitr::kable(head(NSFtoUI_main, 4))
+```
+
+# Visualizations
+
+## Overview of Each Data Set
+
+The USDA awards for University of Idaho
+
+```{r}
+#overview of USDA awards
+USDAdata <- read.csv("USDAtoUI.csv")
+
+#a plot of award money by date
+figure <- ggplot(USDAdata, aes(x= Award.Date, y=Award.Dollars))+ geom_bar(stat='identity', position = "dodge", fill = "pink")
+
+#Style
+fig_label <- labs(title = "USDA awards by Date")
+fig_theme <- theme(panel.background=element_rect(fill="white"))
+
+figure <- figure + fig_label + fig_theme
+
+print(figure)
+```
+
+```{r}
+#a plot of award money by program area
+figure <- ggplot(USDAdata, aes(x= Program.Area.Name, y=Award.Dollars))+ geom_bar(stat='identity', position = "dodge", fill = "lightblue")
+
+#Style
+fig_label <- labs(title = "USDA awards by Area")
+fig_theme <- theme(panel.background=element_rect(fill="white"))
+
+figure <- figure + fig_label + fig_theme
+
+print(figure)
+```
+
+The DOE awards for University of Idaho
+
+```{r}
+#overview of DOE awards
+
+#finding University of Idaho data
+DOE_data <- read_xlsx("DOEawards.xlsx")
+#head(DOE_data)
+
+DOEUofI <- filter(DOE_data, Institution=='Regents of the University of Idaho')
+#print(DOEUofI)
+  
+#end date vs award amount
+figure2 <- ggplot(DOEUofI, aes(x= PI, y='Amount Awarded to Date'))+ geom_bar(stat='identity', position = "dodge", fill = "lightgreen")
+
+print(figure2)
+```
+
+The NIH awards for University of Idaho
+
+```{r}
+#overview of NIH awards
+print(projects_df)
+NIHUofI <- filter(projects_df, organization.org_name == "UNIVERSITY OF IDAHO", is_active == "TRUE")
+
+head(NIHUofI)
+
+#print(NIHUofI)
+```
+
+The NSF awards for University of Idaho
+
+```{r}
+#overview of NSF awards
+
+print(NSFtoUI)
+
+```
+
+## Question 1
+
+Provide a visualization that shows our active awards from each sponsor. I need to see their start date and end date, the amount of the award, and the name of the Principal Investigator. I’m really interested in seeing how far into the future our current portfolio will exist. Are there a bunch of awards about to expire? Are there a bunch that just got funded and will be active for a while? Does this vary across sponsors?
+
+```{r}
+#Cleaning and combining the data for question one and two
+
+#picking out important columns from csv file and adding columns
+
+
+#picking out imp
+```
+
+```{r}
+#comparing them: a timeline
+
+# a graph showing pi on vertical axis sorted by amount awarded (highest amount top), with bars representing start and end dates, color coded based on source (NIH, NSF, DOE, or USDA). and set up with a fixed size and bar spacing with a scroll bar for readabilty if possible. Note: I should only show acrive so filter by that. Note: USDA will not be able to be included because of lack of start and end dates/ is active tag.
+```
+
+## Question 2
+
+What is the proportional representation of new awards to the UI from these various sources over the past 5 to 10 years? Are there any trends that are encouraging or discouraging?
+
+```{r}
+#Trands over time
+
+# a graph showing the number of new awards from each source (or just awards in the case of USDA) vs time, with a different line for each source.
+
+# a graph showing the amount of money per new awards vs. time for each source.
+```
+
+## Comparing the Schools
+
+```{r}
+#cleaning and combining data files
+
+#combining all school csv files
+
+#filter out schools I want from xlsx file
+
+
+```
+
+```{r}
+#comapring the schools to each other
+
+# a graph showing a comparison of awards (or award money) given to each school by source. so a clump showing the number of awards (or amount of money) from for example from the NSF for each school then another clump for NIH, etc. Color coded by school for visibilitie across clumps. Note: active awards only. For the USDA awards for 
+
+# a graph comparing trends for each school (are any downturns coming for all the schools?). color coded and shape coded to clump schools, and sources. Colors for schools, shapes for sources, e.g. solid lines for NSF, rect dash for NIH, triangles dash for DOE, dots dash for USDA.
+
+```
+
+# Conclusion
+
+in conclusion...

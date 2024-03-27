@@ -15,7 +15,6 @@ description: "Examining the Data in the File"
 ```{r}
 #| output: false
 library(tidyverse)
-#library(ggplot2)
 ```
 
 ```{r}
@@ -73,6 +72,7 @@ A histogram of the number of books with a certain rating and a scatter plot of r
 
 ```{r}
 #Number of Ratings
+suppressWarnings({
 fig <- ggplot(BOOKS, aes(x = numRatings))+ geom_histogram(binwidth = 50000)
 
 #Style
@@ -84,10 +84,12 @@ fig_theme <- theme(panel.background=element_rect(fill="white"))
 fig <- fig + fig_labs + fig_theme
 
 print(fig)
+})
 ```
 
 ```{r}
 #Number of Ratings vs. Rating
+suppressWarnings({
 fig <- ggplot(BOOKS, aes(x = numRatings, y = rating))+ geom_point()
 
 #Style
@@ -99,6 +101,7 @@ fig_theme <- theme(panel.background=element_rect(fill="white"))
 fig <- fig + fig_labs + fig_theme
 
 print(fig)
+})
 ```
 
 Multiple Authors? Yes? No? (do I even want to try to make this?)
@@ -163,6 +166,8 @@ Rating Per Year
 
 ```{r}
 #Number of Ratings vs. Rating
+suppressWarnings({
+
 fig <- ggplot(BOOKS, aes(x = publishedYear, y = numRatings))+ geom_point()
 
 #Style
@@ -174,6 +179,9 @@ fig_theme <- theme(panel.background=element_rect(fill="white"))
 fig <- fig + fig_labs + fig_theme
 
 print(fig)
+
+})
+
 ```
 
 First year published vs year published
