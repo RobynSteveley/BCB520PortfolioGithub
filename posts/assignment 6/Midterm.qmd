@@ -8,7 +8,7 @@ categories: [assignment]
 code-fold: true
 code-tools: true
 description: "In Progress..."
-draft: true
+draft: false
 ---
 
 # Preamble
@@ -158,9 +158,47 @@ print(NSFtoUI)
 Provide a visualization that shows our active awards from each sponsor. I need to see their start date and end date, the amount of the award, and the name of the Principal Investigator. I’m really interested in seeing how far into the future our current portfolio will exist. Are there a bunch of awards about to expire? Are there a bunch that just got funded and will be active for a while? Does this vary across sponsors?
 
 ```{r}
-#Cleaning and combining the data for question one and two
+#Cleaning and combining the data for question 1 and question 2 to create master file
 
-#picking out important columns from csv file and adding columns
+
+#The USDA data
+
+#picking out important columns from csv file
+#### done above ####
+
+#adding column: Source: USDA
+USDAdata_main$Source <- 'USDA'
+
+#rename
+colnames(USDAdata_main) <- c('Award_Date', 'Grant_Title', 'School', 'Award_Dollars', 'Program_Name', 'Program_Area_Name', 'Source')
+
+
+#The DOE data
+head(DOE_data_main)
+
+#picking out important columns from xlsx file
+
+#add source column
+DOE_data_main$Source <- 'DOE'
+
+#rename
+#colnames(DOE_data_main) <- c('PI', 'Status', 'Action_Type', 'Start_Date', 'End_Date', )
+
+#filter by school
+
+
+#The NIH data
+
+#picking out important columns from dataframe
+#filter by school
+#rename
+
+
+#The NSF data
+#picking out important columns from dataframe
+#rename
+
+#merge all into master file
 
 
 #picking out imp
