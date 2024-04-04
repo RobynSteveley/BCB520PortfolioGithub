@@ -8,7 +8,7 @@ categories: [assignment]
 code-fold: true
 code-tools: true
 description: "In Progress..."
-draft: false
+draft: true
 ---
 
 # Preamble
@@ -22,192 +22,209 @@ This post compares the University of Idaho grant awards from the department of a
 library(tidyverse)
 library(readxl)
 library(knitr)
+library(scales)
 ```
 
 **Department of Agriculture (USDA)**
 
-```{r}
-#USDA data for (only) University of Idaho
+This is the data set from the USDA. link here:
 
-#reading in the data from file
-USDAdata <- read.csv("USDAtoUI.csv")
+```{r}
+#USDA data (each school in different file)
+
+#reading in the data from the files
+USDAdata_UI <- read.csv("USDAtoUI.csv")  #University of Idaho
+USDAdata_BSU <- read.csv("USDABSU.csv")  #Boise State University
+USDAdata_ISU <- read.csv("USDAISU.csv")  #Idaho State University
+USDAdata_MSU <- read.csv("USDAMSU.csv")  #Montana State University
+USDAdata_UM <- read.csv("USDAUofM.csv")  #University of Montana
+USDAdata_WSU <- read.csv("USDAWSU.csv")  #Washington State University
+
+#combining all schools into one dataframe
+USDAdata_all <- rbind(USDAdata_UI, USDAdata_BSU, USDAdata_ISU, USDAdata_MSU, USDAdata_UM, USDAdata_WSU)
 
 #picking out the columns that might be useful
-USDAdata_main <- USDAdata %>% select(Award.Date, Grant.Title, Grantee.Name, Award.Dollars, Program.Name, Program.Area.Name)
+USDA_data_main <- USDAdata_all %>% select(Award.Date, Grant.Title, Grantee.Name, Award.Dollars, Program.Name, Program.Area.Name)
 
-knitr::kable(head(USDAdata_main, 4))
+#adding column: Source: USDA
+USDA_data_main$Source <- 'USDA'
+
+#rename columns
+colnames(USDA_data_main) <- c('Award Date', 'Grant Title', 'Institution', 'Award Amount', 'Program Name', 'Program Area Name', 'Source')
+
+
+#show table
+knitr::kable(head(USDA_data_main, 4))
 ```
 
 **Department of Energy (DOE)**
 
 ```{r}
-#DOE data for all schools
+#DOE data (for all schools)
 
 #reading in data from file
-DOE_data <- read_xlsx("DOEawards.xlsx")
+suppressMessages(DOE_data <- read_xlsx("DOEawards.xlsx"))
 
-#picking out the coulumns that might be useful
-DOE_data_main <- DOE_data %>% select(PI, Status, 'Action Type', 'Start Date', 'End Date','Most Recent Award Date','Amount Awarded to Date', 'Amount Awarded this FY', 'Program Area')
+#vector so i can pick out out only relevant schools
+schools <- c('Regents of the University of Idaho', 'University of Montana', 'Washington State University', 'Boise State University', 'Idaho State University', 'Montana State University')
 
+#picking out the columns that might be useful
+DOE_data_main <- DOE_data %>% 
+  filter(Institution %in% schools) %>%
+  select(Institution, PI, Status, 'Action Type', 'Start Date', 'End Date','Most Recent Award Date', 'Amount Awarded to Date', 'Amount Awarded this FY', 'Program Area')
+
+#add column: source: DOE
+DOE_data_main$Source <- 'DOE'
+
+#rename columns
+colnames(DOE_data_main) <- c('Institution', 'PI', 'Status', 'Is New', 'Start Date', 'End Date', 'Most Recent Award Date', 'Amount Awarded to Date', 'Amount Awarded this FY', 'Program Area Name', 'Source')
+
+#show table
 knitr::kable(head(DOE_data_main, 4))
 ```
 
 **National Institutes of Health (NIH)**
 
 ```{r}
-#NIH data for all schools
-#note that this must be grabed from NIH API
-#file named projects_df
+#NIH data (for all selected schools)
+#this was grabbed from NIH API and converted to file
+
+#reading the data from the file
+NIH_data <- read_xlsx("NIH_data.xlsx")
 
 #picking out columns that might be useful
-NIH_data_main <- projects_df %>% select(fiscal_year, award_amount, is_active, principal_investigators, contact_pi_name, project_start_date, project_end_date, is_new, project_title, agency_code, organization.org_name)
+NIH_data_main <- NIH_data %>% select(fiscal_year, award_amount, is_active, principal_investigators, contact_pi_name, project_start_date, project_end_date, is_new, project_title, agency_code, organization.org_name) %>% mutate(across(where(is.logical), as.character))
 
+#rename columns
+colnames(NIH_data_main) <- c('Fiscal Year', 'Award Amount', 'Status', 'PIs', 'PI', 'Start Date', 'End Date', 'Is New', 'Program Name', 'Source', 'Institution')
+
+
+#show table
 knitr::kable(head(NIH_data_main, 4))
 ```
 
 **National Science Foundation (NSF)**
 
 ```{r}
-#NSF data for (only) University of Idaho
-#note that this must be grabbed from NSF API
-#other schools must be grabbed
-# file named NSFtoUI
+#NSF data (each school in different file)
+#this was grabbed from NSF API and converted to files
+
+#reading the files
+NSFdata_UI <- read_xlsx("NSF_data.xlsx")  #University of Idaho
+NSFdata_BSU <- read_xlsx("NSFtoBSU.xlsx") #Boise State University
+NSFdata_ISU <- read_xlsx("NSFtoISU.xlsx") #Idaho State University
+NSFdata_MSU <- read_xlsx("NSFtoMSU.xlsx") #Montana State University
+NSFdata_UM <- read_xlsx("NSFtoUM.xlsx")   #University of Montana
+NSFdata_WSU <- read_xlsx("NSFtoWSU.xlsx") #Washington State University
+
+#combining all schools into one dataframe
+NSFdata_all <- rbind(NSFdata_UI, NSFdata_BSU, NSFdata_ISU, NSFdata_MSU, NSFdata_UM, NSFdata_WSU)
 
 #picking out columns that might be useful
-NSFtoUI_main <- NSFtoUI %>% select(agency, awardeeName, estimatedTotalAmt, fundsObligatedAmt, fundProgramName, pdPIName, startDate, expDate)
+NSF_data_main <- NSFdata_all %>% select(agency, awardeeName, estimatedTotalAmt, fundsObligatedAmt, fundProgramName, pdPIName, startDate, expDate)
 
-knitr::kable(head(NSFtoUI_main, 4))
+#rename columns
+colnames(NSF_data_main) <- c('Source', 'Institution', 'Estimated Total Amount', 'Funds obligated', 'Program Name', 'PI', 'Start Date', 'End Date')
+
+
+#show table
+knitr::kable(head(NSF_data_main, 4))
 ```
 
-# Visualizations
-
-## Overview of Each Data Set
-
-The USDA awards for University of Idaho
+**The Combined Data**
 
 ```{r}
-#overview of USDA awards
-USDAdata <- read.csv("USDAtoUI.csv")
+#combining all the data sets together
+combined_data <- bind_rows(USDA_data_main, DOE_data_main, NIH_data_main, NSF_data_main)
 
-#a plot of award money by date
-figure <- ggplot(USDAdata, aes(x= Award.Date, y=Award.Dollars))+ geom_bar(stat='identity', position = "dodge", fill = "pink")
-
-#Style
-fig_label <- labs(title = "USDA awards by Date")
-fig_theme <- theme(panel.background=element_rect(fill="white"))
-
-figure <- figure + fig_label + fig_theme
-
-print(figure)
+#show table
+knitr::kable(head(combined_data, 4))
 ```
 
-```{r}
-#a plot of award money by program area
-figure <- ggplot(USDAdata, aes(x= Program.Area.Name, y=Award.Dollars))+ geom_bar(stat='identity', position = "dodge", fill = "lightblue")
+# Question 1
 
-#Style
-fig_label <- labs(title = "USDA awards by Area")
-fig_theme <- theme(panel.background=element_rect(fill="white"))
-
-figure <- figure + fig_label + fig_theme
-
-print(figure)
-```
-
-The DOE awards for University of Idaho
-
-```{r}
-#overview of DOE awards
-
-#finding University of Idaho data
-DOE_data <- read_xlsx("DOEawards.xlsx")
-#head(DOE_data)
-
-DOEUofI <- filter(DOE_data, Institution=='Regents of the University of Idaho')
-#print(DOEUofI)
-  
-#end date vs award amount
-figure2 <- ggplot(DOEUofI, aes(x= PI, y='Amount Awarded to Date'))+ geom_bar(stat='identity', position = "dodge", fill = "lightgreen")
-
-print(figure2)
-```
-
-The NIH awards for University of Idaho
-
-```{r}
-#overview of NIH awards
-print(projects_df)
-NIHUofI <- filter(projects_df, organization.org_name == "UNIVERSITY OF IDAHO", is_active == "TRUE")
-
-head(NIHUofI)
-
-#print(NIHUofI)
-```
-
-The NSF awards for University of Idaho
-
-```{r}
-#overview of NSF awards
-
-print(NSFtoUI)
-
-```
-
-## Question 1
+In this section we'll look at the following question:
 
 Provide a visualization that shows our active awards from each sponsor. I need to see their start date and end date, the amount of the award, and the name of the Principal Investigator. I’m really interested in seeing how far into the future our current portfolio will exist. Are there a bunch of awards about to expire? Are there a bunch that just got funded and will be active for a while? Does this vary across sponsors?
 
+**The USDA awards for University of Idaho**
+
 ```{r}
-#Cleaning and combining the data for question 1 and question 2 to create master file
+#Overview of award amount per agency for active awards
+
+#filtering the data 
+#note for the USDA I'm only using grants that are dated in 2024
+try({
+#USDA_data_main$'Award Date' <- as.Date(USDA_data_main$'Award Date')
+
+Question_1_1_USDA <- USDA_data_main %>%
+  filter(grepl("UNIVERSITY OF IDAHO", Institution)) %>%
+  filter('Award Date' > 2023-01-01) %>%
+  select('Award Amount', 'Source', 'Institution', 'Award Date')
+
+colnames(Question_1_1_USDA) <- c("Amount", "Source", "Institution", "Date")
+
+Question_1_1_DOE <- DOE_data_main %>%
+  filter(grepl("UNIVERSITY OF IDAHO", Institution)) %>%
+  filter(Status == "Active") %>%
+  select('Amount Awarded this FY', 'Source', 'Institution', 'End Date')
+
+colnames(Question_1_1_DOE) <- c("Amount", "Source", "Institution", "Date")
+
+Question_1_1_NIH <- NIH_data_main %>%
+  filter(grepl("UNIVERSITY OF IDAHO", Institution)) %>%
+  filter(Status == TRUE) %>%
+  select('Award Amount', 'Source', 'Institution', 'End Date')
+
+colnames(Question_1_1_NIH) <- c("Amount", "Source", "Institution", "Date")
+
+Question_1_1_NSF <- NSF_data_main %>%
+  filter(Institution == "Regents of the University of Idaho") %>%
+  filter('End Date' >= 05/30/2024) %>%
+  select('Estimated Total Amount', 'Source', 'Institution', "End Date")
+
+colnames(Question_1_1_NSF) <- c("Amount", "Source", "Institution", "Date")
+
+Question_1_1 <- rbind(Question_1_1_USDA, Question_1_1_DOE, Question_1_1_NIH, Question_1_1_NSF)
+}, silent = FALSE)
+
+################  Making the Graph  ################
+
+# sum award money
+Question_1_1$Amount <- as.numeric(Question_1_1$Amount)
+
+Award_money_by_source <- Question_1_1 %>%
+  group_by(Source) %>%
+  summarise(TotalAmount = sum(Amount))
+
+# Create bar graph
+ggplot(Award_money_by_source, aes(x = Source, y = TotalAmount / 1e6, fill = Source)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Total Award Money per Agency for Active Awards",
+       x = "Agency",
+       y = "Total Award Money (million)") +
+  geom_text(aes(label = round(TotalAmount/1e6, digits = 1), vjust = -0.5)) +
+  theme_minimal()
+```
+
+**Figure 1.** This graph shows a comparison of total award money for active awards per agency. Note that for NSF, NIH, and DOE awards were considered active if they were labeled as such and for the USDA any award with an award date after April 1st 2023 was considered active.
+
+(or at least that will be what this graph is when i figure out how to actually make the filter by dates work... )
+
+```{r}
+#Gantt graph to look at PIs
+
+# a graph showing pi on vertical axis sorted by amount awarded (highest amount top), with bars representing start and end dates, color coded based on source (NIH, NSF, DOE, or USDA). and set up with a fixed size and bar spacing with a scroll bar for readability if possible. Note: I should only show active so filter by that. Note: USDA will not be able to be included because of lack of start and end dates/ is active tag.
+
+# NIH awards
 
 
-#The USDA data
-
-#picking out important columns from csv file
-#### done above ####
-
-#adding column: Source: USDA
-USDAdata_main$Source <- 'USDA'
-
-#rename
-colnames(USDAdata_main) <- c('Award_Date', 'Grant_Title', 'School', 'Award_Dollars', 'Program_Name', 'Program_Area_Name', 'Source')
-
-
-#The DOE data
-head(DOE_data_main)
-
-#picking out important columns from xlsx file
-
-#add source column
-DOE_data_main$Source <- 'DOE'
-
-#rename
-#colnames(DOE_data_main) <- c('PI', 'Status', 'Action_Type', 'Start_Date', 'End_Date', )
-
-#filter by school
-
-
-#The NIH data
-
-#picking out important columns from dataframe
-#filter by school
-#rename
-
-
-#The NSF data
-#picking out important columns from dataframe
-#rename
-
-#merge all into master file
-
-
-#picking out imp
 ```
 
 ```{r}
-#comparing them: a timeline
+# NSF awards
 
-# a graph showing pi on vertical axis sorted by amount awarded (highest amount top), with bars representing start and end dates, color coded based on source (NIH, NSF, DOE, or USDA). and set up with a fixed size and bar spacing with a scroll bar for readabilty if possible. Note: I should only show acrive so filter by that. Note: USDA will not be able to be included because of lack of start and end dates/ is active tag.
+
 ```
 
 ## Question 2
@@ -215,29 +232,33 @@ DOE_data_main$Source <- 'DOE'
 What is the proportional representation of new awards to the UI from these various sources over the past 5 to 10 years? Are there any trends that are encouraging or discouraging?
 
 ```{r}
-#Trands over time
+#Trends over time
 
 # a graph showing the number of new awards from each source (or just awards in the case of USDA) vs time, with a different line for each source.
-
 # a graph showing the amount of money per new awards vs. time for each source.
+
+
+#Question_2_1 <- 
+#ggplot
+
 ```
 
 ## Comparing the Schools
 
 ```{r}
-#cleaning and combining data files
 
-#combining all school csv files
+# a graph showing a comparison of awards (or award money) given to each school by source. so a clump showing the number of awards (or amount of money) from for example from the NSF for each school then another clump for NIH, etc. Color coded by school for visibility across clumps. Note: active awards only. For the USDA awards use date = 2024
 
-#filter out schools I want from xlsx file
+Q3_1_1 <- combined_data %>%
+  group_by(Institution)
 
+ggplot(Q3_1_1, aes(fill=Institution, y='Award Amount', x=Source)) + 
+    geom_bar(position="dodge", stat="identity")
 
 ```
 
 ```{r}
-#comapring the schools to each other
-
-# a graph showing a comparison of awards (or award money) given to each school by source. so a clump showing the number of awards (or amount of money) from for example from the NSF for each school then another clump for NIH, etc. Color coded by school for visibilitie across clumps. Note: active awards only. For the USDA awards for 
+#comparing the schools to each other
 
 # a graph comparing trends for each school (are any downturns coming for all the schools?). color coded and shape coded to clump schools, and sources. Colors for schools, shapes for sources, e.g. solid lines for NSF, rect dash for NIH, triangles dash for DOE, dots dash for USDA.
 
