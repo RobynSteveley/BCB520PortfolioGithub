@@ -8,7 +8,7 @@ categories: [assignment]
 code-fold: true
 code-tools: true
 description: "In Progress..."
-draft: true
+draft: false
 ---
 
 # Preamble
@@ -248,6 +248,8 @@ What is the proportional representation of new awards to the UI from these vario
 ```{r}
 
 # a graph showing a comparison of awards (or award money) given to each school by source. so a clump showing the number of awards (or amount of money) from for example from the NSF for each school then another clump for NIH, etc. Color coded by school for visibility across clumps. Note: active awards only. For the USDA awards use date = 2024
+
+
 
 Q3_1_1 <- combined_data %>%
   group_by(Institution)
