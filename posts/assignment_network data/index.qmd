@@ -8,7 +8,7 @@ format:
 author: "Barrie Robison"
 date: "2024-04-04"
 categories: [Portfolio, DataViz, Network, iGraph, Assignment]
-image: "wendigonetwork.png"
+image: "julia3-7.png"
 description: "iGRAPH!"
 code-fold: true
 code-tools: true

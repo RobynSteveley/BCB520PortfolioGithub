@@ -3,7 +3,8 @@ title: "BCB 520 - Midterm Portfolio Post"
 subtitle: "Comparing University of Idaho grants to similar schools"
 author: "Robyn Steveley"
 date: "2024-03-14"
-categories: [assignment]
+categories: [Assignment]
+image: "PerspectivePainting.jpg"
 
 code-fold: true
 code-tools: true

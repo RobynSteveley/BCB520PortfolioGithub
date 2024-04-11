@@ -3,7 +3,8 @@ title: "Assignment 2"
 subtitle: "Describing Data"
 author: "Robyn Steveley"
 date: "2024-02-10"
-categories: [assignment]
+categories: [Assignment]
+image: "book_picture_Aaron_Burden.jpg"
 
 code-fold: true
 description: "Goodreads Rating Data."

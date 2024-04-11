@@ -4,6 +4,7 @@ subtitle: "Some Examples"
 author: "Robyn Steveley"
 date: "2024-02-18"
 categories: [other, notes,]
+image: "Water WomanEdit.png"
 
 code-fold: true
 code-tools: true

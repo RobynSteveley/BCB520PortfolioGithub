@@ -3,7 +3,8 @@ title: "Assignment 4"
 subtitle: "Marks and Channels"
 author: "Robyn Steveley"
 date: "2024-02-11"
-categories: [assignment]
+categories: [Assignment]
+image: "books_picture_Nick_Fewings.jpg"
 
 code-fold: true
 code-tools: true
