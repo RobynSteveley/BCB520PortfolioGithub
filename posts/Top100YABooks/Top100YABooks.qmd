@@ -13,10 +13,14 @@ description: "Examining the Data in the File"
 
 ## Set Up
 
+Calling the Library:
+
 ```{r}
 #| output: false
 library(tidyverse)
 ```
+
+Reading the File:
 
 ```{r}
 BOOKS <- read.csv("goodreads_Top100_YoungAdultFiction1.csv")
@@ -31,7 +35,9 @@ An overview of the length of these books. A Histogram.
 fig <- ggplot(BOOKS, aes(pages))+ geom_histogram(binwidth = 20, fill="blue")
 
 #Style
-fig_labs <- labs(title = "Number of Pages for Top 100 Young Adult Books")
+fig_labs <- labs(title = "Number of Pages for Top 100 Young Adult Books",
+                 x = "Number of Pages",
+                 y = "Number of Books")
 
 fig_theme <- theme(panel.background=element_rect(fill="beige"))
 
@@ -43,7 +49,7 @@ print(fig)
 
 Series vs Non-Series. A bar plot... maybe?
 
-I would like to figure out how to make this with two bars, one for series and one for stand-alones. Or I would like to change the labels on the bars.
+I would like to figure out how to make this with two bars, one for series and one for stand-alone books. Or I would like to change the labels on the bars.
 
 ```{r}
 #Series vs non-series
@@ -52,19 +58,15 @@ I would like to figure out how to make this with two bars, one for series and on
 fig <- ggplot(BOOKS, aes(x = numberOfSeries))+ geom_bar(position = "dodge", color = "navy", fill = "blue")
 
 #Style
-fig_label <- labs(title = "Books in Series Vs. Stand Alones")
+fig_label <- labs(title = "Books in Series Vs. Stand Alones",
+                  x = "Position in Series",
+                  y = "Number of Books")
 fig_theme <- theme(panel.background=element_rect(fill="white"))
 
 #Showing figure 4
 fig <- fig + fig_label + fig_theme
 
 print(fig)
-```
-
-Number of Books per Genre. An exploration of complex data tables. (In progress...)
-
-```{r}
-
 ```
 
 How Popular of these books?
@@ -88,6 +90,7 @@ print(fig)
 })
 ```
 
+Number of Ratings vs. Rating
 ```{r}
 #Number of Ratings vs. Rating
 suppressWarnings({
@@ -105,19 +108,11 @@ print(fig)
 })
 ```
 
-Multiple Authors? Yes? No? (do I even want to try to make this?)
-
-```{r}
-
-```
-
-Setting? An exploration of searching.
-
-```{r}
-
-```
-
 Book Format
+
+::: callout-note
+This is an irrelevant graph because the book format is random and depends only on what version of the book was uploaded to the list by whoever uploaded it. I just wanted to practice making the graph.
+:::
 
 ```{r}
 fig <- ggplot(BOOKS, aes(x = bookFormat))+ geom_bar(position = "dodge", color = "red", fill = "pink")
@@ -132,21 +127,7 @@ fig <- fig + fig_label + fig_theme
 print(fig)
 ```
 
-Book Format: series vs non series
-
-Pages by genre
-
-Publisher?
-
-```{r}
-
-```
-
-Genre by Publisher
-
-Year published
-
-if year published =/= year first published color (look up how to do this) for popout
+Number of Ratings
 
 ```{r}
 #Number of Ratings
@@ -185,8 +166,3 @@ print(fig)
 
 ```
 
-First year published vs year published
-
-```{r}
-
-```
