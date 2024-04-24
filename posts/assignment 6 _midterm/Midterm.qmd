@@ -12,18 +12,18 @@ description: "In Progress..."
 draft: false
 ---
 
-# Preamble
+# Introduction
 
 This post compares the University of Idaho grant awards from the department of agriculture (USDA), the department of energy (DOE), the national institute of health (NIH), and the national science foundation (NSF) to other similar universities.
 
-# The Data
+## The Data
 
 ```{r}
 #| output: false
 library(tidyverse)
 library(readxl)
 library(knitr)
-library(scales)
+#library(scales)
 ```
 
 **Department of Agriculture (USDA)**
@@ -50,8 +50,11 @@ USDA_data_main <- USDAdata_all %>% select(Award.Date, Grant.Title, Grantee.Name,
 #adding column: Source: USDA
 USDA_data_main$Source <- 'USDA'
 
+#convert dates to date objects
+USDA_data_main$'Award.Date' <- as.Date(USDA_data_main$'Award.Date', format = "%Y-%m-%d")
+
 #rename columns
-colnames(USDA_data_main) <- c('Award Date', 'Grant Title', 'Institution', 'Award Amount', 'Program Name', 'Program Area Name', 'Source')
+colnames(USDA_data_main) <- c('Award_Date', 'Grant_Title', 'Institution', 'Award_Amount', 'Program_Name', 'Program_Area_Name', 'Source')
 
 
 #show table
@@ -77,8 +80,13 @@ DOE_data_main <- DOE_data %>%
 #add column: source: DOE
 DOE_data_main$Source <- 'DOE'
 
+#convert dates to date objects
+DOE_data_main$'Start Date' <- as.Date(DOE_data_main$'Start Date', format = "%m/%d/%Y")
+DOE_data_main$'End Date' <- as.Date(DOE_data_main$'End Date', format = "%m/%d/%Y")
+DOE_data_main$'Most Recent Award Date' <- as.Date(DOE_data_main$'Most Recent Award Date', format = "%m/%d/%Y")
+
 #rename columns
-colnames(DOE_data_main) <- c('Institution', 'PI', 'Status', 'Is New', 'Start Date', 'End Date', 'Most Recent Award Date', 'Amount Awarded to Date', 'Amount Awarded this FY', 'Program Area Name', 'Source')
+colnames(DOE_data_main) <- c('Institution', 'PI', 'Status', 'Is_New', 'Start_Date', 'End_Date', 'Most_Recent_Award_Date', 'Amount_Awarded_to_Date', 'Amount_Awarded_this_FY', 'Program_Area_Name', 'Source')
 
 #show table
 knitr::kable(head(DOE_data_main, 4))
@@ -97,7 +105,12 @@ NIH_data <- read_xlsx("NIH_data.xlsx")
 NIH_data_main <- NIH_data %>% select(fiscal_year, award_amount, is_active, principal_investigators, contact_pi_name, project_start_date, project_end_date, is_new, project_title, agency_code, organization.org_name) %>% mutate(across(where(is.logical), as.character))
 
 #rename columns
-colnames(NIH_data_main) <- c('Fiscal Year', 'Award Amount', 'Status', 'PIs', 'PI', 'Start Date', 'End Date', 'Is New', 'Program Name', 'Source', 'Institution')
+colnames(NIH_data_main) <- c('Fiscal_Year', 'Award_Amount', 'Status', 'PIs', 'PI', 'Start_Date', 'End_Date', 'Is_New', 'Program_Name', 'Source', 'Institution')
+
+#convert dates to date objects
+NIH_data_main$'Start_Date' <- as.Date(NIH_data_main$'Start_Date', format = "%Y-%m-%dT%H:%M:%SZ")
+NIH_data_main$'End_Date' <- as.Date(NIH_data_main$'End_Date', format = "%Y-%m-%dT%H:%M:%SZ")
+
 
 
 #show table
@@ -125,8 +138,14 @@ NSFdata_all <- rbind(NSFdata_UI, NSFdata_BSU, NSFdata_ISU, NSFdata_MSU, NSFdata_
 NSF_data_main <- NSFdata_all %>% select(agency, awardeeName, estimatedTotalAmt, fundsObligatedAmt, fundProgramName, pdPIName, startDate, expDate)
 
 #rename columns
-colnames(NSF_data_main) <- c('Source', 'Institution', 'Estimated Total Amount', 'Funds obligated', 'Program Name', 'PI', 'Start Date', 'End Date')
+colnames(NSF_data_main) <- c('Source', 'Institution', 'Estimated_Total_Amount', 'Funds_Obligated', 'Program_Name', 'PI', 'Start_Date', 'End_Date')
 
+#convert dates to date objects
+NSF_data_main$'Start_Date' <- as.Date(NSF_data_main$'Start_Date', format = "%m/%d/%Y")
+NSF_data_main$'End_Date' <- as.Date(NSF_data_main$'End_Date', format = "%m/%d/%Y")
+
+# Filter out rows with NA values in StartDate or EndDate
+#NSF_data_main <- NSF_data_main[complete.cases(NSF_data_main$'Start Date', NSF_data_main$'End Date'), ]
 
 #show table
 knitr::kable(head(NSF_data_main, 4))
@@ -142,13 +161,11 @@ combined_data <- bind_rows(USDA_data_main, DOE_data_main, NIH_data_main, NSF_dat
 knitr::kable(head(combined_data, 4))
 ```
 
-# Question 1
+# Question 1: Active Awards
 
 In this section we'll look at the following question:
 
 Provide a visualization that shows our active awards from each sponsor. I need to see their start date and end date, the amount of the award, and the name of the Principal Investigator. I’m really interested in seeing how far into the future our current portfolio will exist. Are there a bunch of awards about to expire? Are there a bunch that just got funded and will be active for a while? Does this vary across sponsors?
-
-**The USDA awards for University of Idaho**
 
 ```{r}
 #Overview of award amount per agency for active awards
@@ -156,33 +173,34 @@ Provide a visualization that shows our active awards from each sponsor. I need t
 #filtering the data 
 #note for the USDA I'm only using grants that are dated in 2024
 try({
-#USDA_data_main$'Award Date' <- as.Date(USDA_data_main$'Award Date')
-
+  
 Question_1_1_USDA <- USDA_data_main %>%
   filter(grepl("UNIVERSITY OF IDAHO", Institution)) %>%
-  filter('Award Date' > 2023-01-01) %>%
-  select('Award Amount', 'Source', 'Institution', 'Award Date')
+  filter(Award_Date > '2023-06-01') %>%
+  select('Award_Amount', 'Source', 'Institution', 'Award_Date')
 
 colnames(Question_1_1_USDA) <- c("Amount", "Source", "Institution", "Date")
 
 Question_1_1_DOE <- DOE_data_main %>%
   filter(grepl("UNIVERSITY OF IDAHO", Institution)) %>%
   filter(Status == "Active") %>%
-  select('Amount Awarded this FY', 'Source', 'Institution', 'End Date')
+  select('Amount_Awarded_this_FY', 'Source', 'Institution', 'End_Date')
 
 colnames(Question_1_1_DOE) <- c("Amount", "Source", "Institution", "Date")
 
 Question_1_1_NIH <- NIH_data_main %>%
   filter(grepl("UNIVERSITY OF IDAHO", Institution)) %>%
   filter(Status == TRUE) %>%
-  select('Award Amount', 'Source', 'Institution', 'End Date')
+  select('Award_Amount', 'Source', 'Institution', 'End_Date')
 
 colnames(Question_1_1_NIH) <- c("Amount", "Source", "Institution", "Date")
 
+#Note: I might want to use funds obligated instead?
 Question_1_1_NSF <- NSF_data_main %>%
   filter(Institution == "Regents of the University of Idaho") %>%
-  filter('End Date' >= 05/30/2024) %>%
-  select('Estimated Total Amount', 'Source', 'Institution', "End Date")
+  filter(End_Date > '2024-01-01') %>%
+  select('Estimated_Total_Amount', 'Source', 'Institution', "End_Date") %>%
+  mutate(Estimated_Total_Amount = as.numeric(Estimated_Total_Amount))
 
 colnames(Question_1_1_NSF) <- c("Amount", "Source", "Institution", "Date")
 
@@ -202,7 +220,7 @@ Award_money_by_source <- Question_1_1 %>%
 ggplot(Award_money_by_source, aes(x = Source, y = TotalAmount / 1e6, fill = Source)) +
   geom_bar(stat = "identity") +
   labs(title = "Total Award Money per Agency for Active Awards",
-       x = "Agency",
+       x = "",
        y = "Total Award Money (million)") +
   geom_text(aes(label = round(TotalAmount/1e6, digits = 1), vjust = -0.5)) +
   theme_minimal()
@@ -219,34 +237,49 @@ ggplot(Award_money_by_source, aes(x = Source, y = TotalAmount / 1e6, fill = Sour
 
 # NIH awards
 
-#Q_1_2_NIH <- NIH_data_main
-
-#Q_1_2_NIH$'Start Date' <- as.Date(Q_1_2_NIH$'Start Date', format = "%Y-%m-%d")
-#Q_1_2_NIH$'End Date' <- as.Date(Q_1_2_NIH$'End Date', format = "%Y-%m-%d")
-
-
-#ggplot(Q_1_2_NIH, aes(y = PI, x = 'Start Date', xend = 'End Date', yend = PI)) +
-  #geom_segment(linewidth = 4, color = "violet") +
-  #scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
-  #labs(title = "NIH Active Awards Timeline for PI",
-      # x = "Year",
-      # y = "Principal Investigator") +
-  #theme_minimal()
+Q1_2_NIH <- NIH_data_main %>%
+  filter(grepl("UNIVERSITY OF IDAHO", Institution)) %>%
+  filter(Status == TRUE) %>%
+  group_by(PI) %>%
+  reframe(amount = sum(Award_Amount), Start_Date, End_Date)
   
+  
+ggplot(Q1_2_NIH, aes(x = Start_Date, xend = End_Date, y = reorder(PI, +amount), yend = PI)) +
+  geom_segment(linewidth = 5, color = "violet") +
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
+  labs(title = "NIH Active Awards Timeline for PI",
+       x = "Year",
+       y = "Principal Investigator") +
+  geom_text(aes(label =  amount), hjust = -1, color = "black") +
+  theme_minimal()
   
 ```
 
 ```{r}
 # NSF awards
-#same as above
 
-# DOE awards
-#same as above
-# don't need this one simce no active awards
+Q1_2_NSF <- NSF_data_main %>%
+  filter(grepl("University of Idaho", Institution)) %>%
+  filter(End_Date > '2024-01-01') %>%
+  mutate(Estimated_Total_Amount = as.numeric(Estimated_Total_Amount)) %>%
+  group_by(PI) %>%
+  reframe(amount = sum(Estimated_Total_Amount), Start = min(Start_Date), End = max(End_Date))
+
+
+
+ggplot(Q1_2_NSF, aes(x = Start, xend = End, y = reorder(PI, +amount), yend = PI)) +
+  geom_segment(linewidth = 2, color = "lightgreen") +
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
+  labs(title = "NSF Active Awards Timeline for PI",
+       x = "Year",
+       y = "Principal Investigator") +
+  geom_text(aes(label =  amount), hjust = -1, color = "black") +
+  theme_minimal()
+
 
 ```
 
-## Question 2
+# Question 2: Trends
 
 What is the proportional representation of new awards to the UI from these various sources over the past 5 to 10 years? Are there any trends that are encouraging or discouraging?
 
@@ -256,13 +289,27 @@ What is the proportional representation of new awards to the UI from these vario
 # a graph showing the number of new awards from each source (or just awards in the case of USDA) vs time, with a different line for each source.
 # a graph showing the amount of money per new awards vs. time for each source.
 
+# Pick out group based on USDA: awards by date
 
-#Question_2_1 <- 
-#ggplot
+# pick out group based on everything else: awards by start date
+
+#Q2_1 <- combine the two above
+
+
+#ggplot(Q2_1, aes(x = Start.year , y = n, color = Source, linetype = source)) + 
+  #geom_line(size = 1) +
+  #scale_color_manual(values = ) +
+  #scale_linetype_manual(values = ) +
+  #labs(title = "Number of New Awards",
+      # x = "Year",
+      # y = "Number of New Awards") +
+    #theme_minimal()
 
 ```
 
-## Comparing the Schools
+# Question 3: Comparing the Schools
+
+In this section we'll compare the University of Idaho to some other schools.
 
 ```{r}
 
@@ -272,7 +319,7 @@ What is the proportional representation of new awards to the UI from these vario
 
 suppressMessages({
 
-Q3_1_1 <- combined_data %>%
+Q3_1 <- combined_data %>%
   filter(Source %in% c("NIH", "NSF", "USDA", "DOE")) %>%
   #filter(by the date!!!!) %>%
   mutate(category = case_when(
@@ -293,9 +340,9 @@ Q3_1_1 <- combined_data %>%
 institution_colors <- c("University of Idaho" = "gold", "Boise State University" = "salmon", "Idaho State University" = "skyblue", "Montana State University" = "forestgreen",  "University of Montana" = "violet",  "Washington State University" = "brown")
 
 
-ggplot(Q3_1_1, aes(x = Source, y = awards_count, fill = category)) + 
+ggplot(Q3_1, aes(x = Source, y = awards_count, fill = category)) + 
   geom_bar(stat="identity", position = "dodge") +
-  scale_fill_manual(values = institution_colors, name = "Institution") +
+  scale_fill_manual(values = institution_colors, name = "School") +
   labs(title = "Number of Awards Per School (Over All Dates)",
        x = "",
        y = "Number of Awards") +
@@ -310,7 +357,7 @@ ggplot(Q3_1_1, aes(x = Source, y = awards_count, fill = category)) +
 
 # a graph comparing trends for each school (are any downturns coming for all the schools?). color coded and shape coded to clump schools, and sources. Colors for schools, shapes for sources, e.g. solid lines for NSF, rect dash for NIH, triangles dash for DOE, dots dash for USDA.
 
-
+#Q3_
 
 ```
 

@@ -95,8 +95,6 @@ MOVIES_3 <- MOVIES %>%
   filter(runtime < 140) %>%
   filter(budget > 0)
 
-#filter these down to something interesting. only a couple of movies or only movies from a certain genre or country
-
 ggplot(MOVIES_3, aes(x = reorder(title, +budget), y = runtime, fill = budget)) +
   geom_bar(stat = "identity") +
   coord_flip() +
