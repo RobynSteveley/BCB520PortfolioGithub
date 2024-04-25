@@ -289,22 +289,42 @@ What is the proportional representation of new awards to the UI from these vario
 # a graph showing the number of new awards from each source (or just awards in the case of USDA) vs time, with a different line for each source.
 # a graph showing the amount of money per new awards vs. time for each source.
 
+suppressWarnings({
+  suppressMessages({
+  
 # Pick out group based on USDA: awards by date
+Q2_1_USDA <- USDA_data_main %>%
+  filter(grepl("UNIVERSITY OF IDAHO", Institution)) %>%
+  mutate( Award_Date = as.integer(format(Award_Date, "%Y"))) %>%
+  select(Award_Date, Institution, Source)
 
 # pick out group based on everything else: awards by start date
+Q2_1_Other <- combined_data %>%
+  filter(grepl("UNIVERSITY OF IDAHO", Institution, ignore.case = TRUE)) %>%
+  filter(Source %in% c("NIH", "NSF", "DOE")) %>%
+  mutate(Start_Date = as.integer(format(Start_Date, "%Y"))) %>%
+  select(Start_Date, Institution, Source) %>%
+  rename(Award_Date = Start_Date)
+  
 
-#Q2_1 <- combine the two above
+#combined everything
 
+Q2_1 <- rbind(Q2_1_USDA, Q2_1_Other) %>%
+  filter(Award_Date >= 2015) %>%
+  group_by(Award_Date, Source) %>%
+  summarise(count = n(), Source)
 
-#ggplot(Q2_1, aes(x = Start.year , y = n, color = Source, linetype = source)) + 
-  #geom_line(size = 1) +
-  #scale_color_manual(values = ) +
-  #scale_linetype_manual(values = ) +
-  #labs(title = "Number of New Awards",
-      # x = "Year",
-      # y = "Number of New Awards") +
-    #theme_minimal()
+ggplot(Q2_1, aes(x = Award_Date , y = count, color = Source)) + 
+  geom_line(size = 1) +
+  #scale_color_manual(values = c()) +
+  #scale_linetype_manual(values = c()) +
+  labs(title = "Number of Awards per Year (Since 2015)",
+       x = "Year",
+       y = "Number of New Awards") +
+    theme_minimal()
 
+}) 
+})
 ```
 
 # Question 3: Comparing the Schools
@@ -321,7 +341,7 @@ suppressMessages({
 
 Q3_1 <- combined_data %>%
   filter(Source %in% c("NIH", "NSF", "USDA", "DOE")) %>%
-  #filter(by the date!!!!) %>%
+  filter(Award_Date > '2010-01-01' | Start_Date > '2010-01-01') %>%
   mutate(category = case_when(
       grepl("University of Idaho", Institution, ignore.case = TRUE) ~ "University of Idaho",
       grepl("Boise State University", Institution, ignore.case = TRUE) ~ "Boise State University",
@@ -343,7 +363,7 @@ institution_colors <- c("University of Idaho" = "gold", "Boise State University"
 ggplot(Q3_1, aes(x = Source, y = awards_count, fill = category)) + 
   geom_bar(stat="identity", position = "dodge") +
   scale_fill_manual(values = institution_colors, name = "School") +
-  labs(title = "Number of Awards Per School (Over All Dates)",
+  labs(title = "Number of Awards Per School (After Jan 1 2010)",
        x = "",
        y = "Number of Awards") +
     theme_minimal()
@@ -357,7 +377,47 @@ ggplot(Q3_1, aes(x = Source, y = awards_count, fill = category)) +
 
 # a graph comparing trends for each school (are any downturns coming for all the schools?). color coded and shape coded to clump schools, and sources. Colors for schools, shapes for sources, e.g. solid lines for NSF, rect dash for NIH, triangles dash for DOE, dots dash for USDA.
 
-#Q3_
+suppressWarnings({
+  suppressMessages({
+  
+# Pick out group based on USDA: awards by date
+Q3_1_USDA <- USDA_data_main %>%
+  mutate( Award_Date = as.integer(format(Award_Date, "%Y"))) %>%
+  select(Award_Date, Institution, Source)
+
+# pick out group based on everything else: awards by start date
+Q3_1_Other <- combined_data %>%
+  filter(Source %in% c("NIH", "NSF", "DOE")) %>%
+  mutate(Start_Date = as.integer(format(Start_Date, "%Y"))) %>%
+  select(Start_Date, Institution, Source) %>%
+  rename(Award_Date = Start_Date)
+  
+
+#combined everything
+
+Q3_1 <- rbind(Q3_1_USDA, Q3_1_Other) %>%
+  filter(Award_Date >= 2015) %>%
+   mutate(school = case_when(
+      grepl("University of Idaho", Institution, ignore.case = TRUE) ~ "University of Idaho",
+      grepl("Boise State University", Institution, ignore.case = TRUE) ~ "Boise State University",
+      grepl("Idaho State University", Institution, ignore.case = TRUE) ~ "Idaho State University",
+      grepl("Montana State University", Institution, ignore.case = TRUE) ~ "Montana State University",
+      grepl("University of Montana", Institution, ignore.case = TRUE) ~ "University of Montana",
+      grepl("Washington State University", Institution, ignore.case = TRUE) ~ "Washington State University")) %>%
+  group_by(Award_Date, Source, school) %>%
+  summarise(count = n(), Source, school)
+
+ggplot(Q3_1, aes(x = Award_Date , y = count, color = Source, linetype = school)) + 
+  geom_line(size = 1) +
+  #scale_color_manual(values = c()) +
+  #scale_linetype_manual(values = c()) +
+  labs(title = "Number of Awards per Year (Since 2015)",
+       x = "Year",
+       y = "Number of New Awards") +
+    theme_minimal()
+
+}) 
+})
 
 ```
 
