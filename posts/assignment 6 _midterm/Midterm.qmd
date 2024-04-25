@@ -23,7 +23,6 @@ This post compares the University of Idaho grant awards from the department of a
 library(tidyverse)
 library(readxl)
 library(knitr)
-#library(scales)
 ```
 
 **Department of Agriculture (USDA)**
@@ -102,10 +101,10 @@ knitr::kable(head(DOE_data_main, 4))
 NIH_data <- read_xlsx("NIH_data.xlsx")
 
 #picking out columns that might be useful
-NIH_data_main <- NIH_data %>% select(fiscal_year, award_amount, is_active, principal_investigators, contact_pi_name, project_start_date, project_end_date, is_new, project_title, agency_code, organization.org_name) %>% mutate(across(where(is.logical), as.character))
+NIH_data_main <- NIH_data %>% select(fiscal_year, award_amount, is_active, contact_pi_name, project_start_date, project_end_date, is_new, project_title, agency_code, organization.org_name) %>% mutate(across(where(is.logical), as.character))
 
 #rename columns
-colnames(NIH_data_main) <- c('Fiscal_Year', 'Award_Amount', 'Status', 'PIs', 'PI', 'Start_Date', 'End_Date', 'Is_New', 'Program_Name', 'Source', 'Institution')
+colnames(NIH_data_main) <- c('Fiscal_Year', 'Award_Amount', 'Status', 'PI', 'Start_Date', 'End_Date', 'Is_New', 'Program_Name', 'Source', 'Institution')
 
 #convert dates to date objects
 NIH_data_main$'Start_Date' <- as.Date(NIH_data_main$'Start_Date', format = "%Y-%m-%dT%H:%M:%SZ")
@@ -144,8 +143,6 @@ colnames(NSF_data_main) <- c('Source', 'Institution', 'Estimated_Total_Amount', 
 NSF_data_main$'Start_Date' <- as.Date(NSF_data_main$'Start_Date', format = "%m/%d/%Y")
 NSF_data_main$'End_Date' <- as.Date(NSF_data_main$'End_Date', format = "%m/%d/%Y")
 
-# Filter out rows with NA values in StartDate or EndDate
-#NSF_data_main <- NSF_data_main[complete.cases(NSF_data_main$'Start Date', NSF_data_main$'End Date'), ]
 
 #show table
 knitr::kable(head(NSF_data_main, 4))
@@ -171,7 +168,7 @@ Provide a visualization that shows our active awards from each sponsor. I need t
 #Overview of award amount per agency for active awards
 
 #filtering the data 
-#note for the USDA I'm only using grants that are dated in 2024
+#Note: for the USDA I have to estimate what should be counted as current
 try({
   
 Question_1_1_USDA <- USDA_data_main %>%
@@ -233,17 +230,21 @@ ggplot(Award_money_by_source, aes(x = Source, y = TotalAmount / 1e6, fill = Sour
 ```{r}
 #Gantt graph to look at PIs
 
-# a graph showing pi on vertical axis sorted by amount awarded (highest amount top), with bars representing start and end dates, color coded based on source (NIH, NSF, DOE, or USDA). and set up with a fixed size and bar spacing with a scroll bar for readability if possible. Note: I should only show active so filter by that. Note: USDA will not be able to be included because of lack of start and end dates/ is active tag.
+#what my plan was:
+# a graph showing pi on vertical axis sorted by amount awarded (highest amount top), with bars representing start and end dates, color coded based on source (NIH, NSF, DOE, or USDA). and set up with a fixed size and bar spacing with a scroll bar for readability if possible. Note: I should only show active so filter by that. Note: USDA will not be able to be included because of lack of start and end dates/ is active tag. Note: DOE will not be included because there are no active awards.
 
-# NIH awards
+######################################
 
+# NIH awards timeline by PI
+
+#Sorting NIH data
 Q1_2_NIH <- NIH_data_main %>%
   filter(grepl("UNIVERSITY OF IDAHO", Institution)) %>%
   filter(Status == TRUE) %>%
   group_by(PI) %>%
   reframe(amount = sum(Award_Amount), Start_Date, End_Date)
   
-  
+#Making the graph 
 ggplot(Q1_2_NIH, aes(x = Start_Date, xend = End_Date, y = reorder(PI, +amount), yend = PI)) +
   geom_segment(linewidth = 5, color = "violet") +
   scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
@@ -256,8 +257,9 @@ ggplot(Q1_2_NIH, aes(x = Start_Date, xend = End_Date, y = reorder(PI, +amount), 
 ```
 
 ```{r}
-# NSF awards
+# NSF awards timeline by PI
 
+#Sorting the NSF data
 Q1_2_NSF <- NSF_data_main %>%
   filter(grepl("University of Idaho", Institution)) %>%
   filter(End_Date > '2024-01-01') %>%
@@ -265,8 +267,7 @@ Q1_2_NSF <- NSF_data_main %>%
   group_by(PI) %>%
   reframe(amount = sum(Estimated_Total_Amount), Start = min(Start_Date), End = max(End_Date))
 
-
-
+#Making the graph
 ggplot(Q1_2_NSF, aes(x = Start, xend = End, y = reorder(PI, +amount), yend = PI)) +
   geom_segment(linewidth = 2, color = "lightgreen") +
   scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
@@ -275,7 +276,6 @@ ggplot(Q1_2_NSF, aes(x = Start, xend = End, y = reorder(PI, +amount), yend = PI)
        y = "Principal Investigator") +
   geom_text(aes(label =  amount), hjust = -1, color = "black") +
   theme_minimal()
-
 
 ```
 
@@ -306,14 +306,13 @@ Q2_1_Other <- combined_data %>%
   select(Start_Date, Institution, Source) %>%
   rename(Award_Date = Start_Date)
   
-
-#combined everything
-
+#combined everything and grouping it for graph
 Q2_1 <- rbind(Q2_1_USDA, Q2_1_Other) %>%
   filter(Award_Date >= 2015) %>%
   group_by(Award_Date, Source) %>%
   summarise(count = n(), Source)
 
+#Making the graph
 ggplot(Q2_1, aes(x = Award_Date , y = count, color = Source)) + 
   geom_line(size = 1) +
   #scale_color_manual(values = c()) +
@@ -339,6 +338,7 @@ In this section we'll compare the University of Idaho to some other schools.
 
 suppressMessages({
 
+#Grouping data by school and filtering by date and agency
 Q3_1 <- combined_data %>%
   filter(Source %in% c("NIH", "NSF", "USDA", "DOE")) %>%
   filter(Award_Date > '2010-01-01' | Start_Date > '2010-01-01') %>%
@@ -356,10 +356,11 @@ Q3_1 <- combined_data %>%
     summarise(awards_count = n())
 })
 
-
+#Picking out colors for bars
 institution_colors <- c("University of Idaho" = "gold", "Boise State University" = "salmon", "Idaho State University" = "skyblue", "Montana State University" = "forestgreen",  "University of Montana" = "violet",  "Washington State University" = "brown")
 
 
+#Making the graph
 ggplot(Q3_1, aes(x = Source, y = awards_count, fill = category)) + 
   geom_bar(stat="identity", position = "dodge") +
   scale_fill_manual(values = institution_colors, name = "School") +
@@ -391,10 +392,8 @@ Q3_1_Other <- combined_data %>%
   mutate(Start_Date = as.integer(format(Start_Date, "%Y"))) %>%
   select(Start_Date, Institution, Source) %>%
   rename(Award_Date = Start_Date)
-  
 
-#combined everything
-
+#combined everything and grouping it for graph
 Q3_1 <- rbind(Q3_1_USDA, Q3_1_Other) %>%
   filter(Award_Date >= 2015) %>%
    mutate(school = case_when(
@@ -407,10 +406,14 @@ Q3_1 <- rbind(Q3_1_USDA, Q3_1_Other) %>%
   group_by(Award_Date, Source, school) %>%
   summarise(count = n(), Source, school)
 
-ggplot(Q3_1, aes(x = Award_Date , y = count, color = Source, linetype = school)) + 
+# Agency Lines
+agency_marks <- c('DOE' = 'dotdash', 'NIH' = 'dashed', 'NSF' = 'solid', 'USDA' = 'dotted')
+
+#Making the graph
+ggplot(Q3_1, aes(x = Award_Date , y = count, color = school, linetype = Source)) + 
   geom_line(size = 1) +
-  #scale_color_manual(values = c()) +
-  #scale_linetype_manual(values = c()) +
+  scale_color_manual(values = institution_colors) +
+  scale_linetype_manual(values = agency_marks) +
   labs(title = "Number of Awards per Year (Since 2015)",
        x = "Year",
        y = "Number of New Awards") +
