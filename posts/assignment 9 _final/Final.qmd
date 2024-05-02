@@ -356,8 +356,31 @@ p1 | p2 | p3
 
 ```
 
-```{r}
-#Let's make a graph tracking the change in runtime for different companies over time
+```{r fig.height=80, fig.width=10}
+
+MOVIES_Q4_1 <- Animated_MOVIES %>%
+  filter(!(grepl(",", production_countries))) %>%
+  group_by(production_countries) %>%
+  summarise(NumMovies = n())
+
+ggplot(MOVIES_Q4_1, aes(x = production_countries, y = NumMovies, fill = NumMovies)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Movies by country",
+       x = "Country",
+       y = "Number of Movies",
+       fill = "") +
+  #geom_text(aes(label =  title), hjust = +1, color = "lightyellow") +
+  theme(panel.background = element_rect(fill = "lightyellow"), 
+        panel.grid = element_blank(),
+        axis.text.x = element_text(angle = 90, hjust = 0),
+        plot.title = element_text(hjust = 0.1)) +
+  scale_fill_gradient(low = "blue", high = "orange")+
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, size = 9, color = "black"), 
+        axis.text.y = element_text(angle = 0, hjust = 1, size = 9, color = "black"))+
+  theme(legend.title = element_text(size = 12, color = "black"), 
+        legend.text = element_text(size = 9, color = "black"),
+        legend.position = "bottom")
 ```
 
 ```{r}
