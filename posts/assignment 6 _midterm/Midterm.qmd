@@ -412,8 +412,8 @@ agency_marks <- c('DOE' = 'dotdash', 'NIH' = 'dashed', 'NSF' = 'solid', 'USDA' =
 #Making the graph
 ggplot(Q3_1, aes(x = Award_Date , y = count, color = school, linetype = Source)) + 
   geom_line(size = 1) +
-  scale_color_manual(values = institution_colors) +
-  scale_linetype_manual(values = agency_marks) +
+  scale_color_manual(values = institution_colors, name = 'School') +
+  scale_linetype_manual(values = agency_marks, name = 'Agency') +
   labs(title = "Number of Awards per Year (Since 2015)",
        x = "Year",
        y = "Number of New Awards") +
